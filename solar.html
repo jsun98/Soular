@@ -7,7 +7,6 @@
     <style>
         body {
             background-color: #f0f0f0;
-            margin: 0px;
             overflow: hidden;
         }
     </style>
@@ -15,13 +14,12 @@
 <body>
 
 <script src="build/three.js"></script>
-<script src="js/controls/TrackballControls.js"></script>
-<script src="js/libs/ammo.js"></script>
-<script src="js/controls/OrbitControls.js"></script>
+<!-<script src="js/libs/ammo.js"></script>-!>
 <script src="js/Detector.js"></script>
 <script src="js/libs/stats.min.js"></script>
 <script src="js/renderers/Projector.js"></script>
 <script src="js/renderers/CanvasRenderer.js"></script>
+<script src="js/controls/FirstPersonControls.js"></script>
 
 <script>
     // - Global variables -
@@ -43,15 +41,18 @@
     var camera, controls, scene, renderer;
     var txtureLoader;
 
-    //var clock = new THREE.Clock();
+    var clock = new THREE.Clock();
 
 
     // - Main code -
     init();
     animate();
+
+
+
+
     // - Functions -
-
-
+    // initialize
     function init() {
         initGraphics();
         createObjects();
@@ -59,6 +60,7 @@
         initEventListeners();
     }
 
+    //initialize event listeners
     function initEventListeners() {
         /*
         renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -68,7 +70,13 @@
 
         window.addEventListener( 'resize', onWindowResize, false );
     }
+
+    //initialize graphics and background panorama
     function initGraphics() {
+        if ( ! Detector.webgl ) {
+            Detector.addGetWebGLMessage();
+            document.getElementById( 'container' ).innerHTML = "";
+        }
         container = document.createElement( 'div' );
         document.body.appendChild( container );
         camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 12000 );
@@ -91,9 +99,10 @@
         createPanorama();
     }
 
+    //algorithm to create fish eye panorama
     function createPanorama() {
 
-        var geometry = new THREE.SphereBufferGeometry( 5000, 40, 40 ).toNonIndexed();
+        var geometry = new THREE.SphereBufferGeometry( 5000, 15, 15 ).toNonIndexed();
         geometry.scale( - 1, 1, 1 );
         // Remap UVs
         var correction;
@@ -122,7 +131,16 @@
         scene.add( mesh );
     }
 
+    //initialize user control
     function initInput(){
+
+        //first person controls
+        controls = new THREE.FirstPersonControls( camera );
+        controls.movementSpeed = 1000;
+        controls.lookSpeed = 0.125;
+        controls.lookVertical = true;
+
+        /*
         //controls
         controls = new THREE.TrackballControls( camera );
         controls.rotateSpeed = 2.0;
@@ -133,9 +151,11 @@
         controls.noPan = false;
         controls.staticMoving = true;
         controls.dynamicDampingFactor = 0.3;
+        */
 
     }
 
+    //create planets and stars
     function createObjects() {
 
         //sun
@@ -153,96 +173,97 @@
 
 
         txtureLoader.load( MERCURYPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 45, 32, 32 );
+            var geometry = new THREE.SphereGeometry( 35, 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
             planet.castShadow = true;
             planet.receiveShadow = true;
-            planet.position.x=450;
+            planet.position.x= 500;
             scene.add( planet );
         } );
 
         txtureLoader.load( VENUSPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 60, 32, 32 );
+            var geometry = new THREE.SphereGeometry( 80 , 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
             planet.castShadow = true;
             planet.receiveShadow = true;
-            planet.position.x=800;
+            planet.position.x=720;
             scene.add( planet );
         } );
 
         txtureLoader.load( EARTHPIC, function ( texture ) {
+            var geometry = new THREE.SphereGeometry( 80, 32, 32 );
+            var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
+            var planet = new THREE.Mesh( geometry, material );
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x= 1080;
+            scene.add( planet );
+        } );
+
+        txtureLoader.load( MARSPIC, function ( texture ) {
             var geometry = new THREE.SphereGeometry( 70, 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
             planet.castShadow = true;
             planet.receiveShadow = true;
-            planet.position.x=1000;
-            scene.add( planet );
-        } );
-
-        txtureLoader.load( MARSPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 67, 32, 32 );
-            var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
-            var planet = new THREE.Mesh( geometry, material );
-            planet.castShadow = true;
-            planet.receiveShadow = true;
-            planet.position.x=1200;
+            planet.position.x=1450;
             scene.add( planet );
         } );
 
         txtureLoader.load( JUPITORPIC, function ( texture ) {
+            var geometry = new THREE.SphereGeometry( 250, 32, 32 );
+            var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
+            var planet = new THREE.Mesh( geometry, material );
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x=2200;
+            scene.add( planet );
+        } );
+
+        txtureLoader.load( SATURNPIC, function ( texture ) {
             var geometry = new THREE.SphereGeometry( 200, 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
             planet.castShadow = true;
             planet.receiveShadow = true;
-            planet.position.x=1600;
-            scene.add( planet );
-        } );
-
-        txtureLoader.load( SATURNPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 180, 32, 32 );
-            var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
-            var planet = new THREE.Mesh( geometry, material );
-            planet.castShadow = true;
-            planet.receiveShadow = true;
-            planet.position.x=2000;
+            planet.position.x=3100;
             scene.add( planet );
         } );
 
 
         txtureLoader.load( URANUSPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 130, 32, 32 );
+            var geometry = new THREE.SphereGeometry( 140, 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
             planet.castShadow = true;
             planet.receiveShadow = true;
-            planet.position.x=2400;
+            planet.position.x=3800;
             scene.add( planet );
         } );
 
         txtureLoader.load( NEPTUNEPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 120, 32, 32 );
+            var geometry = new THREE.SphereGeometry( 140, 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
             planet.castShadow = true;
             planet.receiveShadow = true;
-            planet.position.x=2700;
+            planet.position.x=4450;
             scene.add( planet );
         } );
 
+        /*
         txtureLoader.load( DOGEPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 120, 32, 32 );
+            var geometry = new THREE.SphereGeometry( 30, 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
             planet.castShadow = true;
             planet.receiveShadow = true;
-            planet.position.x=3000;
+            planet.position.x=5000;
             scene.add( planet );
         } );
-
+    */
 
 
         //rendering
@@ -264,12 +285,14 @@
         container.appendChild( stats.dom );
     }
 
+    //event function for resizing window
     function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize( window.innerWidth, window.innerHeight );
     }
 
+    //loop
     function animate() {
 
         requestAnimationFrame( animate );
@@ -279,9 +302,10 @@
 
     }
 
+    //loop
     function render() {
 
-        controls.update();
+        controls.update( clock.getDelta() );
 
         renderer.render( scene, camera );
 
