@@ -36,6 +36,7 @@
     const URANUSPIC = 'textures/uranus.jpg';
     const NEPTUNEPIC = 'textures/neptune.jpg';
     const JUPITORPIC = 'textures/jupitor.jpg';
+    const SATURNRINGPIC = 'textures/saturnring.jpg';
 
 
     //Physics variables
@@ -75,6 +76,7 @@
         initGraphics();
         initGUI();
         createObjects();
+        initPhysics();
         initInput();
         initEventListeners();
     }
@@ -269,14 +271,21 @@
             scene.add( planet );
         } );
 
-        txtureLoader.load( SATURNPIC, function ( texture ) {
-            var geometry = new THREE.SphereGeometry( 200, 32, 32 );
-            var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
-            var planet = new THREE.Mesh( geometry, material );
-            planet.castShadow = true;
-            planet.receiveShadow = true;
-            planet.position.x=3100;
-            scene.add( planet );
+
+        txtureLoader.load( SATURNPIC, SATURNRINGPIC, function ( texture1, texture2 ) {
+            var geometry_ring = new THREE.RingGeometry( 220, 400, 32, 8, Math.PI/3 );
+            var material_ring = new THREE.MeshBasicMaterial( { map: texture2, overdraw: 0.5, side: THREE.DoubleSide } );
+            
+            var ring = new THREE.Mesh( geometry_ring, material_ring );
+
+            var geometry_saturn = new THREE.SphereGeometry( 200, 32, 32 );
+            ring.updateMatrix();
+            geometry_saturn.merge(ring.geometry, ring.matrix);
+
+            var saturn = new THREE.Mesh(geometry_saturn, new THREE.MeshBasicMaterial( { map: texture1, overdraw: 0.5 }));
+
+
+            scene.add( saturn );
         } );
 
 
