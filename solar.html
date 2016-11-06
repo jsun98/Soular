@@ -92,8 +92,8 @@
         document.body.appendChild( container );
 
         camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 25000 );
-        camera.position.z = 2500;
-        camera.position.y = 500;
+        camera.position.z = 0;
+        camera.position.y = 5500;
 
 
 
@@ -431,10 +431,14 @@
         if (mercury) {
             mercury.position.x = 2400 * Math.cos((47.4/5.4)*theta);
             mercury.position.z = 2400 * Math.sin((47.4/5.4)*theta);
+            mercury.rotation.x += 0.1;
+            mercury.rotation.y += 0.1;
         }
         if (venus) {
             venus.position.x = 2800 * Math.cos((35/5.4)*theta);
-            venus.position.z = 800 * Math.sin((35/5.4)*2theta);
+            venus.position.z = 2800 * Math.sin((35/5.4)*theta);
+            venus.rotation.x += 0.1;
+            venus.rotation.y += 0.1;
         }
         if (earth) {
             earth.position.x = 3300 * Math.cos((29.8/5.4)*theta);
@@ -447,6 +451,8 @@
         if (jupitor) {
             jupitor.position.x = 5200 * Math.cos((13.1/5.4)*theta);
             jupitor.position.z = 5200 * Math.sin((13.1/5.4)*theta);
+            jupitor.rotation.x += 0.1;
+            jupitor.rotation.y += 0.1;
         }
         if (saturn && saturn_ring) {
             saturn.position.x = 7000 * Math.cos((9.7/5.4)*theta);
@@ -465,7 +471,7 @@
             neptune.position.z = 9500 * Math.sin(theta);
         }
 
-        theta += 0.01;
+        theta += 0.001;
         if (theta == Math.PI * 2 - 0.01) theta = 0;
 
         renderer.render( scene, camera );
