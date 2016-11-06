@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>three.js - webGL - Solar System Simulator</title>
+    <title>Solar System Simulator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style>
@@ -374,16 +374,6 @@
         renderer.setSize( window.innerWidth, window.innerHeight );
         renderer.sortObjects = false;
         container.appendChild( renderer.domElement );
-
-
-
-        var info = document.createElement( 'div' );
-        info.style.position = 'absolute';
-        info.style.top = '10px';
-        info.style.width = '100%';
-        info.style.textAlign = 'center';
-        info.innerHTML = '<a href="http://threejs.org" target="_blank">three.js</a> webgl - draggable cubes';
-        container.appendChild( info );
 
         stats = new Stats();
         container.appendChild( stats.dom );
