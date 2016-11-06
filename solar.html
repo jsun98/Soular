@@ -63,6 +63,8 @@
 
     //var orbitController;
 
+    var objects = [];
+
 
     // - Main code -
     init();
@@ -115,7 +117,7 @@
         container = document.createElement( 'div' );
         document.body.appendChild( container );
 
-        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 12000 );
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 20000 );
         camera.position.z = 2500;
         camera.position.y = 500;
 
@@ -149,7 +151,7 @@
     //algorithm to create fish eye panorama
     function createPanorama() {
 
-        var geometry = new THREE.SphereBufferGeometry( 6000, 15, 15 ).toNonIndexed();
+        var geometry = new THREE.SphereBufferGeometry( 10000, 15, 15 ).toNonIndexed();
         geometry.scale( - 1, 1, 1 );
         // Remap UVs
         var correction;
@@ -173,7 +175,7 @@
         //
         var texture = new THREE.TextureLoader().load( STARPIC );
         texture.format = THREE.RGBFormat;
-        var material   = new THREE.MeshLambertMaterial( { map: texture } );
+        var material   = new THREE.MeshBasicMaterial( { map: texture } );
         var mesh = new THREE.Mesh( geometry, material );
         scene.add( mesh );
     }
@@ -223,6 +225,7 @@
             sun.castShadow = true;
             sun.receiveShadow = true;
             scene.add(sun);
+            objects.push(sun);
         });
 
         //planets
@@ -236,6 +239,7 @@
             planet.receiveShadow = true;
             planet.position.x = 500;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(VENUSPIC, function (texture) {
@@ -246,6 +250,7 @@
             planet.receiveShadow = true;
             planet.position.x = 720;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(EARTHPIC, function (texture) {
@@ -256,6 +261,7 @@
             planet.receiveShadow = true;
             planet.position.x = 1080;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(MARSPIC, function (texture) {
@@ -266,6 +272,7 @@
             planet.receiveShadow = true;
             planet.position.x = 1450;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(JUPITORPIC, function (texture) {
@@ -276,6 +283,7 @@
             planet.receiveShadow = true;
             planet.position.x = 2200;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(SATURNPIC, function (texture) {
@@ -286,6 +294,7 @@
             planet.receiveShadow = true;
             planet.position.x = 3100;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(SATURNRINGPIC, function (texture) {
@@ -297,6 +306,7 @@
             planet.receiveShadow = true;
             planet.position.x = 3100;
             scene.add(planet);
+            objects.push(planet);
         });
 
 
@@ -308,6 +318,7 @@
             planet.receiveShadow = true;
             planet.position.x = 4000;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(URANUSRINGPIC, function (texture) {
@@ -319,6 +330,7 @@
             planet.receiveShadow = true;
             planet.position.x = 4000;
             scene.add(planet);
+            objects.push(planet);
         });
 
         txtureLoader.load(NEPTUNEPIC, function (texture) {
@@ -329,6 +341,7 @@
             planet.receiveShadow = true;
             planet.position.x = 4900;
             scene.add(planet);
+            objects.push(planet);
         });
 
 
@@ -434,6 +447,9 @@
         }
         orbitController.update();
         */
+
+
+
         stats.update();
 
     }
