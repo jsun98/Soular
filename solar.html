@@ -14,6 +14,10 @@
 <body>
 
 <script src="build/three.js"></script>
+<<<<<<< HEAD
+<script src="js/libs/ammo.js"></script>
+=======
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
 <script src="js/Detector.js"></script>
 <script src="js/libs/stats.min.js"></script>
 <script src="js/renderers/Projector.js"></script>
@@ -39,6 +43,23 @@
     const URANUSRINGPIC = 'textures/uranusring.png';
 
 
+<<<<<<< HEAD
+    //Physics variables
+    var gravityConstant = 0;
+    var collisionConfiguration;
+    var dispatcher;
+    var broadphase;
+    var solver;
+    var physicsWorld;
+    var rigidBodies = [];
+    var margin = 0.05;
+    //var hinge;
+    //var rope;
+    //var transformAux1 = new Ammo.btTransform();
+
+
+=======
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
     // Graphics variables
     var container, stats;
     var camera, controls, scene, renderer;
@@ -48,9 +69,12 @@
 
     //var orbitController;
 
+<<<<<<< HEAD
+=======
     var sun, mercury, venus, earth, mars, jupitor, saturn, uranus, neptune;
     var saturn_ring, uranus_ring;
 
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
 
     // - Main code -
     init();
@@ -81,6 +105,21 @@
         */
         window.addEventListener( 'resize', onWindowResize, false );
     }
+<<<<<<< HEAD
+    
+    //initialize physics
+    function initPhysics() {
+	collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
+	dispatcher = new Ammo.btCollisionDispatcher( collisionConfiguration );
+	broadphase = new Ammo.btDbvtBroadphase();
+	solver = new Ammo.btSequentialImpulseConstraintSolver();
+	softBodySolver = new Ammo.btDefaultSoftBodySolver();
+	physicsWorld = new Ammo.btSoftRigidDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration, softBodySolver);
+	physicsWorld.setGravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+	physicsWorld.getWorldInfo().set_m_gravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+    }
+=======
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
 	
     //initialize graphics and background panorama
     function initGraphics() {
@@ -91,9 +130,18 @@
         container = document.createElement( 'div' );
         document.body.appendChild( container );
 
+<<<<<<< HEAD
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 12000 );
+=======
         camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 25000 );
+<<<<<<< HEAD
         camera.position.z = 0;
         camera.position.y = 5500;
+=======
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
+        camera.position.z = 2500;
+        camera.position.y = 500;
+>>>>>>> origin/master
 
 
 
@@ -113,7 +161,11 @@
          scene.add( light );*/
 
         var ambLight = new THREE.AmbientLight( 0x909090);
+<<<<<<< HEAD
+        var light = new THREE.PointLight( 0xffffff, 2, 5000);
+=======
         var light = new THREE.PointLight( 0xffffff, 2, 10000);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
 
         scene.add( ambLight );
         scene.add( light );
@@ -125,7 +177,11 @@
     //algorithm to create fish eye panorama
     function createPanorama() {
 
+<<<<<<< HEAD
+        var geometry = new THREE.SphereBufferGeometry( 6000, 15, 15 ).toNonIndexed();
+=======
         var geometry = new THREE.SphereBufferGeometry( 15000, 15, 15 ).toNonIndexed();
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         geometry.scale( - 1, 1, 1 );
         // Remap UVs
         var correction;
@@ -149,7 +205,11 @@
         //
         var texture = new THREE.TextureLoader().load( STARPIC );
         texture.format = THREE.RGBFormat;
+<<<<<<< HEAD
+        var material   = new THREE.MeshLambertMaterial( { map: texture } );
+=======
         var material   = new THREE.MeshBasicMaterial( { map: texture } );
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         var mesh = new THREE.Mesh( geometry, material );
         scene.add( mesh );
     }
@@ -193,9 +253,15 @@
 
         //sun
         txtureLoader.load(SUNPIC, function (texture) {
+<<<<<<< HEAD
+            var geometry_sun = new THREE.SphereGeometry(400, 40, 40);
+            var material_sun = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var sun = new THREE.Mesh(geometry_sun, material_sun);
+=======
             var geometry_sun = new THREE.SphereGeometry(2000, 40, 40);
             var material_sun = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
             sun = new THREE.Mesh(geometry_sun, material_sun);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
             sun.castShadow = true;
             sun.receiveShadow = true;
             scene.add(sun);
@@ -207,104 +273,185 @@
         txtureLoader.load(MERCURYPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(35, 32, 32);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 500;
+            scene.add(planet);
+=======
             mercury = new THREE.Mesh(geometry, material);
             mercury.castShadow = true;
             mercury.receiveShadow = true;
             mercury.position.x = 2400;
             scene.add(mercury);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(VENUSPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(80, 32, 32);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 720;
+            scene.add(planet);
+=======
             venus = new THREE.Mesh(geometry, material);
             venus.castShadow = true;
             venus.receiveShadow = true;
             venus.position.x = 2800;
             scene.add(venus);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(EARTHPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(80, 32, 32);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 1080;
+            scene.add(planet);
+=======
             earth = new THREE.Mesh(geometry, material);
             earth.castShadow = true;
             earth.receiveShadow = true;
             earth.position.x = 3300;
             scene.add(earth);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(MARSPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(70, 32, 32);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 1450;
+            scene.add(planet);
+=======
             mars = new THREE.Mesh(geometry, material);
             mars.castShadow = true;
             mars.receiveShadow = true;
             mars.position.x = 3800;
             scene.add(mars);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(JUPITORPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(280, 32, 32);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 2200;
+            scene.add(planet);
+=======
             jupitor = new THREE.Mesh(geometry, material);
             jupitor.castShadow = true;
             jupitor.receiveShadow = true;
             jupitor.position.x = 5200;
             scene.add(jupitor);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(SATURNPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(200, 32, 32);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 3100;
+            scene.add(planet);
+=======
             saturn = new THREE.Mesh(geometry, material);
             saturn.castShadow = true;
             saturn.receiveShadow = true;
             saturn.position.x = 7000;
             scene.add(saturn);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(SATURNRINGPIC, function (texture) {
             var geometry = new THREE.RingGeometry(220, 420, 32);
             geometry.rotateX(Math.PI / 3);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5, side: THREE.DoubleSide});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 3100;
+            scene.add(planet);
+=======
             saturn_ring = new THREE.Mesh(geometry, material);
             saturn_ring.castShadow = true;
             saturn_ring.receiveShadow = true;
             saturn_ring.position.x = 7000;
             scene.add(saturn_ring);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
 
         txtureLoader.load(URANUSPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(100, 32, 32);
             var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 4000;
+            scene.add(planet);
+=======
             uranus = new THREE.Mesh(geometry, material);
             uranus.castShadow = true;
             uranus.receiveShadow = true;
             uranus.position.x = 8400;
             scene.add(uranus);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(URANUSRINGPIC, function (texture) {
             var geometry = new THREE.RingGeometry(220, 270, 32);
             var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5, side: THREE.DoubleSide});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.rotateX(-Math.PI/3);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 4000;
+            scene.add(planet);
+=======
             uranus_ring = new THREE.Mesh(geometry, material);
             uranus_ring.rotateX(-Math.PI/3);
             uranus_ring.castShadow = true;
             uranus_ring.receiveShadow = true;
             uranus_ring.position.x = 8400;
             scene.add(uranus_ring);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
         txtureLoader.load(NEPTUNEPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(100, 32, 32);
             var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+<<<<<<< HEAD
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 4900;
+            scene.add(planet);
+=======
             neptune = new THREE.Mesh(geometry, material);
             neptune.castShadow = true;
             neptune.receiveShadow = true;
             neptune.position.x = 9500;
             scene.add(neptune);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         });
 
 
@@ -320,6 +467,16 @@
         }
 
 
+<<<<<<< HEAD
+        drawCircles(500);
+        drawCircles(720);
+        drawCircles(1080);
+        drawCircles(1450);
+        drawCircles(2200);
+        drawCircles(3100);
+        drawCircles(4000);
+        drawCircles(4900);
+=======
 
         drawCircles(2400);
         drawCircles(2800);
@@ -329,6 +486,7 @@
         drawCircles(7000);
         drawCircles(8400);
         drawCircles(9500);
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
 
         /*
         txtureLoader.load( DOGEPIC, function ( texture s) {
@@ -411,13 +569,23 @@
         }
         orbitController.update();
         */
+<<<<<<< HEAD
+=======
 
 
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
         stats.update();
 
     }
 
     //loop
+<<<<<<< HEAD
+    function render() {
+
+        controls.update( clock.getDelta() );
+
+
+=======
 
     var theta = 0;
     function render() {
@@ -473,6 +641,7 @@
 
         theta += 0.001;
         if (theta == Math.PI * 2 - 0.01) theta = 0;
+>>>>>>> b070dd3ea973a1b2a492acd4ff3ef37594e5c12e
 
         renderer.render( scene, camera );
 
