@@ -14,7 +14,7 @@
 <body>
 
 <script src="build/three.js"></script>
-<!-<script src="js/libs/ammo.js"></script>-!>
+<script src="js/libs/ammo.js"></script>
 <script src="js/Detector.js"></script>
 <script src="js/libs/stats.min.js"></script>
 <script src="js/renderers/Projector.js"></script>
@@ -34,6 +34,20 @@
     const URANUSPIC = 'textures/uranus.jpg';
     const NEPTUNEPIC = 'textures/neptune.jpg';
     const JUPITORPIC = 'textures/jupitor.jpg';
+
+
+    //Physics variables
+    var gravityConstant = 0;
+    var collisionConfiguration;
+    var dispatcher;
+    var broadphase;
+    var solver;
+    var physicsWorld;
+    var rigidBodies = [];
+    var margin = 0.05;
+    //var hinge;
+    //var rope;
+    //var transformAux1 = new Ammo.btTransform();
 
 
     // Graphics variables
@@ -70,7 +84,19 @@
 
         window.addEventListener( 'resize', onWindowResize, false );
     }
-
+    
+    //initialize physics
+    function initPhysics() {
+	collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
+	dispatcher = new Ammo.btCollisionDispatcher( collisionConfiguration );
+	broadphase = new Ammo.btDbvtBroadphase();
+	solver = new Ammo.btSequentialImpulseConstraintSolver();
+	softBodySolver = new Ammo.btDefaultSoftBodySolver();
+	physicsWorld = new Ammo.btSoftRigidDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration, softBodySolver);
+	physicsWorld.setGravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+	physicsWorld.getWorldInfo().set_m_gravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+    }
+	
     //initialize graphics and background panorama
     function initGraphics() {
         if ( ! Detector.webgl ) {
