@@ -25,6 +25,7 @@
 
 <script>
     // - Global variables -
+    const STARPIC = 'textures/stars.jpg';
     const SUNPIC = 'textures/sun.jpg';
     const EARTHPIC = 'textures/earth.jpg';
     const VENUSPIC = 'textures/venus.jpg';
@@ -70,8 +71,8 @@
     function initGraphics() {
         container = document.createElement( 'div' );
         document.body.appendChild( container );
-        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 10000 );
-        camera.position.z = 10000;
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 12000 );
+        camera.position.z = 6000;
         scene = new THREE.Scene();
         renderer = new THREE.WebGLRenderer( { antialias: true } );
 
@@ -87,6 +88,38 @@
         light.shadow.mapSize.height = 2048;
         scene.add( light );
         txtureLoader = new THREE.TextureLoader();
+        createPanorama();
+    }
+
+    function createPanorama() {
+
+        var geometry = new THREE.SphereBufferGeometry( 5000, 40, 40 ).toNonIndexed();
+        geometry.scale( - 1, 1, 1 );
+        // Remap UVs
+        var correction;
+        var normals = geometry.attributes.normal.array;
+        var uvs = geometry.attributes.uv.array;
+        for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+            var x = normals[ i * 3 ];
+            var y = normals[ i * 3 + 1 ];
+            var z = normals[ i * 3 + 2 ];
+            if ( i < l / 2 ) {
+                correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+                uvs[ i * 2 ] = x * ( 404 / 1920 ) * correction + ( 447 / 1920 );
+                uvs[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+            } else {
+                correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+                uvs[ i * 2 ] = - x * ( 404 / 1920 ) * correction + ( 1460 / 1920 );
+                uvs[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+            }
+        }
+        geometry.rotateZ( - Math.PI / 4 );
+        //
+        var texture = new THREE.TextureLoader().load( STARPIC );
+        texture.format = THREE.RGBFormat;
+        var material   = new THREE.MeshBasicMaterial( { map: texture } );
+        var mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
     }
 
     function initInput(){
