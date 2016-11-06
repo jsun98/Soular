@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>three.js - webGL - Solar System Simulator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+<script src="build/three.js"></script>
+<script src="js/libs/ammo.js"></script>
+<script src="js/Detector.js"></script>
+<script src="js/libs/stats.min.js"></script>
+<script src="js/renderers/Projector.js"></script>
+<script src="js/renderers/CanvasRenderer.js"></script>
+<script src="js/controls/FirstPersonControls.js"></script>
+<script src="js/controls/OrbitControls.js"></script>
+<script src="js/libs/dat.gui.min.js"></script>
+
+<script>
+    // - Global variables -
+    const STARPIC = 'textures/stars.jpg';
+    const SUNPIC = 'textures/sun.jpg';
+    const EARTHPIC = 'textures/earth.jpg';
+    const VENUSPIC = 'textures/venus.jpg';
+    const MERCURYPIC = 'textures/mercury.jpg';
+    const MARSPIC = 'textures/mars.jpg';
+    //const DOGEPIC = 'textures/doge.jpg';
+    const SATURNPIC = 'textures/saturn.jpg';
+    const URANUSPIC = 'textures/uranus.png';
+    const NEPTUNEPIC = 'textures/neptune.jpg';
+    const JUPITORPIC = 'textures/jupitor.jpg';
+    const SATURNRINGPIC = 'textures/saturnring.png';
+    const URANUSRINGPIC = 'textures/uranusring.png';
+
+
+    //Physics variables
+    var gravityConstant = 0;
+    var collisionConfiguration;
+    var dispatcher;
+    var broadphase;
+    var solver;
+    var physicsWorld;
+    var rigidBodies = [];
+    var margin = 0.05;
+    //var hinge;
+    //var rope;
+    //var transformAux1 = new Ammo.btTransform();
+
+
+    // Graphics variables
+    var container, stats;
+    var camera, controls, scene, renderer;
+    var txtureLoader;
+
+    var clock = new THREE.Clock();
+
+    //var orbitController;
+
+
+    // - Main code -
+    init();
+    animate();
+
+
+
+
+    // - Functions -
+    // initialize
+    function init() {
+        initGraphics();
+        initGUI();
+        createObjects();
+        initInput();
+        initEventListeners();
+    }
+
+    //initialize event listeners
+    function initEventListeners() {
+        /*
+
+
+        renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
+        renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+        renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
+        */
+        window.addEventListener( 'resize', onWindowResize, false );
+    }
+    
+    //initialize physics
+    function initPhysics() {
+	collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
+	dispatcher = new Ammo.btCollisionDispatcher( collisionConfiguration );
+	broadphase = new Ammo.btDbvtBroadphase();
+	solver = new Ammo.btSequentialImpulseConstraintSolver();
+	softBodySolver = new Ammo.btDefaultSoftBodySolver();
+	physicsWorld = new Ammo.btSoftRigidDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration, softBodySolver);
+	physicsWorld.setGravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+	physicsWorld.getWorldInfo().set_m_gravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+    }
+	
+    //initialize graphics and background panorama
+    function initGraphics() {
+        if ( ! Detector.webgl ) {
+            Detector.addGetWebGLMessage();
+            document.getElementById( 'container' ).innerHTML = "";
+        }
+        container = document.createElement( 'div' );
+        document.body.appendChild( container );
+
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 12000 );
+        camera.position.z = 2500;
+        camera.position.y = 500;
+
+
+
+        scene = new THREE.Scene();
+        renderer = new THREE.WebGLRenderer(  );
+
+        //lighting and colors
+        /*scene.add( new THREE.AmbientLight( 0x505050 ) );
+         var light = new THREE.SpotLight( 0xffffff, 1.5 );
+         light.position.set( 0, 500, 2000 );
+         shadows
+         light.castShadow = true;
+         light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 200, 10000 ) );
+         light.shadow.bias = - 0.00022;
+         light.shadow.mapSize.width = 2048;
+         light.shadow.mapSize.height = 2048;
+         scene.add( light );*/
+
+        var ambLight = new THREE.AmbientLight( 0x909090);
+        var light = new THREE.PointLight( 0xffffff, 2, 5000);
+
+        scene.add( ambLight );
+        scene.add( light );
+
+        txtureLoader = new THREE.TextureLoader();
+        createPanorama();
+    }
+
+    //algorithm to create fish eye panorama
+    function createPanorama() {
+
+        var geometry = new THREE.SphereBufferGeometry( 6000, 15, 15 ).toNonIndexed();
+        geometry.scale( - 1, 1, 1 );
+        // Remap UVs
+        var correction;
+        var normals = geometry.attributes.normal.array;
+        var uvs = geometry.attributes.uv.array;
+        for ( var i = 0, l = normals.length / 3; i < l; i ++ ) {
+            var x = normals[ i * 3 ];
+            var y = normals[ i * 3 + 1 ];
+            var z = normals[ i * 3 + 2 ];
+            if ( i < l / 2 ) {
+                correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+                uvs[ i * 2 ] = x * ( 404 / 1920 ) * correction + ( 447 / 1920 );
+                uvs[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+            } else {
+                correction = ( x == 0 && z == 0 ) ? 1 : ( Math.acos( - y ) / Math.sqrt( x * x + z * z ) ) * ( 2 / Math.PI );
+                uvs[ i * 2 ] = - x * ( 404 / 1920 ) * correction + ( 1460 / 1920 );
+                uvs[ i * 2 + 1 ] = z * ( 404 / 1080 ) * correction + ( 582 / 1080 );
+            }
+        }
+        geometry.rotateZ( - Math.PI / 4 );
+        //
+        var texture = new THREE.TextureLoader().load( STARPIC );
+        texture.format = THREE.RGBFormat;
+        var material   = new THREE.MeshLambertMaterial( { map: texture } );
+        var mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+    }
+
+    //initialize user control
+    function initInput(){
+
+        //first person controls
+        controls = new THREE.FirstPersonControls( camera );
+        controls.movementSpeed = 1000;
+        controls.lookSpeed = 0.100;
+        controls.lookVertical = true;
+        controls.enabled = true;
+
+
+        //automatic orbit
+        //orbitController = new THREE.OrbitControls( camera, renderer.domElement );
+        //orbitController.enableDamping = true;
+        //orbitController.dampingFactor = 0.25;
+        //orbitController.autoRotate = false;
+        //orbitController.rotateSpeed = 10;
+
+
+        /*
+        //controls
+        controls = new THREE.TrackballControls( camera );
+        controls.rotateSpeed = 2.0;
+        controls.zoomSpeed = 0.5;
+        controls.panSpeed = 0.8;
+        controls.noRotate = false;
+        controls.noZoom = false;
+        controls.noPan = false;
+        controls.staticMoving = true;
+        controls.dynamicDampingFactor = 0.3;
+        */
+
+    }
+
+    //create planets and stars
+    function createObjects() {
+
+        //sun
+        txtureLoader.load(SUNPIC, function (texture) {
+            var geometry_sun = new THREE.SphereGeometry(400, 40, 40);
+            var material_sun = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var sun = new THREE.Mesh(geometry_sun, material_sun);
+            sun.castShadow = true;
+            sun.receiveShadow = true;
+            scene.add(sun);
+        });
+
+        //planets
+
+
+        txtureLoader.load(MERCURYPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(35, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 500;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(VENUSPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(80, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 720;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(EARTHPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(80, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 1080;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(MARSPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(70, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 1450;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(JUPITORPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(280, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 2200;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(SATURNPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(200, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 3100;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(SATURNRINGPIC, function (texture) {
+            var geometry = new THREE.RingGeometry(220, 420, 32);
+            geometry.rotateX(Math.PI / 3);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5, side: THREE.DoubleSide});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 3100;
+            scene.add(planet);
+        });
+
+
+        txtureLoader.load(URANUSPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(100, 32, 32);
+            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 4000;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(URANUSRINGPIC, function (texture) {
+            var geometry = new THREE.RingGeometry(220, 270, 32);
+            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5, side: THREE.DoubleSide});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.rotateX(-Math.PI/3);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 4000;
+            scene.add(planet);
+        });
+
+        txtureLoader.load(NEPTUNEPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(100, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var planet = new THREE.Mesh(geometry, material);
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x = 4900;
+            scene.add(planet);
+        });
+
+
+        function drawCircles(radius) {
+
+                    var segments = 64;
+                    var material = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
+                    var geometry = new THREE.CircleGeometry(radius, segments);
+
+            geometry.vertices.shift();
+            geometry.rotateX(Math.PI/2);
+            scene.add(new THREE.Line(geometry, material));
+        }
+
+
+        drawCircles(500);
+        drawCircles(720);
+        drawCircles(1080);
+        drawCircles(1450);
+        drawCircles(2200);
+        drawCircles(3100);
+        drawCircles(4000);
+        drawCircles(4900);
+
+        /*
+        txtureLoader.load( DOGEPIC, function ( texture s) {
+            var geometry = new THREE.SphereGeometry( 30, 32, 32 );
+            var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
+            var planet = new THREE.Mesh( geometry, material );
+            planet.castShadow = true;
+            planet.receiveShadow = true;
+            planet.position.x=5000;
+            scene.add( planet );
+        } );
+    */
+
+
+        //rendering
+        renderer.setClearColor( 0x000000 );
+        renderer.setPixelRatio( window.devicePixelRatio );
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.sortObjects = false;
+        container.appendChild( renderer.domElement );
+
+
+
+        var info = document.createElement( 'div' );
+        info.style.position = 'absolute';
+        info.style.top = '10px';
+        info.style.width = '100%';
+        info.style.textAlign = 'center';
+        info.innerHTML = '<a href="http://threejs.org" target="_blank">three.js</a> webgl - draggable cubes';
+        container.appendChild( info );
+
+        stats = new Stats();
+        container.appendChild( stats.dom );
+    }
+
+    function initGUI() {
+        var gui = new dat.GUI();
+        var folder1 = gui.addFolder( 'Projectile Parameters' );
+        //folder1.add( effectController, "gravityConstant", 0.0, 1000.0, 0.05 ).onChange( dynamicValuesChanger );
+
+
+        var folder2 = gui.addFolder( 'Static parameters - press restartSimulation' );
+        //folder2.add( effectController, "radius", 10.0, 1000.0, 1.0 );
+        //folder2.add( effectController, "mass", 1.0, 50.0, 0.1 );
+        //folder2.add( effectController, "velocity", 0.0, 150.0, 0.1 );
+        /*
+        var buttonRestart = {
+            restartSimulation: function() {
+                restartSimulation();
+            }
+        };
+        folder2.add( buttonRestart, 'restartSimulation' );
+        */
+        //folder1.open();
+        //folder2.open();
+    }
+
+    //event function for resizing window
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+
+
+    //loop
+    function animate() {
+
+        requestAnimationFrame(animate);
+
+        render();
+
+        /*
+        if (orbitController.autoRotate) {
+
+            var multiplier = 2;
+            if (Math.abs(camera.position.y) >= 1000)
+                multiplier *= -1;
+            camera.position.y += multiplier;
+        }
+        orbitController.update();
+        */
+        stats.update();
+
+    }
+
+    //loop
+    function render() {
+
+        controls.update( clock.getDelta() );
+
+
+
+        renderer.render( scene, camera );
+
+    }
+
+</script>
+
+</body>
+</html>
