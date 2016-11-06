@@ -20,6 +20,8 @@
 <script src="js/renderers/Projector.js"></script>
 <script src="js/renderers/CanvasRenderer.js"></script>
 <script src="js/controls/FirstPersonControls.js"></script>
+<script src="js/controls/OrbitControls.js"></script>
+<script src="js/libs/dat.gui.min.js"></script>
 
 <script>
     // - Global variables -
@@ -57,6 +59,8 @@
 
     var clock = new THREE.Clock();
 
+    //var orbitController;
+
 
     // - Main code -
     init();
@@ -69,6 +73,7 @@
     // initialize
     function init() {
         initGraphics();
+        initGUI();
         createObjects();
         initInput();
         initEventListeners();
@@ -77,11 +82,13 @@
     //initialize event listeners
     function initEventListeners() {
         /*
+
+
+        renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
+
         renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
         renderer.domElement.addEventListener( 'mousedown', onDocumentMouseDown, false );
-        renderer.domElement.addEventListener( 'mouseup', onDocumentMouseUp, false );
         */
-
         window.addEventListener( 'resize', onWindowResize, false );
     }
     
@@ -108,6 +115,8 @@
 
         camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 12000 );
         camera.position.z = 2500;
+
+
 
         scene = new THREE.Scene();
         renderer = new THREE.WebGLRenderer(  );
@@ -168,6 +177,14 @@
         controls.lookSpeed = 0.100;
         controls.lookVertical = true;
         controls.enabled = true;
+
+
+        //automatic orbit
+        //orbitController = new THREE.OrbitControls( camera, renderer.domElement );
+        //orbitController.enableDamping = true;
+        //orbitController.dampingFactor = 0.25;
+        //orbitController.autoRotate = false;
+        //orbitController.rotateSpeed = 10;
 
 
         /*
@@ -303,6 +320,8 @@
         renderer.sortObjects = false;
         container.appendChild( renderer.domElement );
 
+
+
         var info = document.createElement( 'div' );
         info.style.position = 'absolute';
         info.style.top = '10px';
@@ -313,6 +332,28 @@
 
         stats = new Stats();
         container.appendChild( stats.dom );
+    }
+
+    function initGUI() {
+        var gui = new dat.GUI();
+        var folder1 = gui.addFolder( 'Projectile Parameters' );
+        //folder1.add( effectController, "gravityConstant", 0.0, 1000.0, 0.05 ).onChange( dynamicValuesChanger );
+
+
+        var folder2 = gui.addFolder( 'Static parameters - press restartSimulation' );
+        //folder2.add( effectController, "radius", 10.0, 1000.0, 1.0 );
+        //folder2.add( effectController, "mass", 1.0, 50.0, 0.1 );
+        //folder2.add( effectController, "velocity", 0.0, 150.0, 0.1 );
+        /*
+        var buttonRestart = {
+            restartSimulation: function() {
+                restartSimulation();
+            }
+        };
+        folder2.add( buttonRestart, 'restartSimulation' );
+        */
+        //folder1.open();
+        //folder2.open();
     }
 
     //event function for resizing window
@@ -326,9 +367,20 @@
     //loop
     function animate() {
 
-        requestAnimationFrame( animate );
+        requestAnimationFrame(animate);
 
         render();
+
+        /*
+        if (orbitController.autoRotate) {
+
+            var multiplier = 2;
+            if (Math.abs(camera.position.y) >= 1000)
+                multiplier *= -1;
+            camera.position.y += multiplier;
+        }
+        orbitController.update();
+        */
         stats.update();
 
     }
