@@ -3,6 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="fc0530d9-68eb-4e61-b776-399382ec676c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+<<<<<<< HEAD
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/solar.html" afterPath="$PROJECT_DIR$/solar.html" />
+>>>>>>> parent of acf7719... ring
     </list>
     <ignored path="solar_system_Three.js.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +32,13 @@
       <file leaf-file-name="solar.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/solar.html">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="15">
               <caret line="265" column="12" selection-start-line="265" selection-start-column="12" selection-end-line="265" selection-end-column="12" />
+=======
+            <state relative-caret-position="1980">
+              <caret line="132" column="62" selection-start-line="132" selection-start-column="62" selection-end-line="132" selection-end-column="62" />
+>>>>>>> parent of acf7719... ring
               <folding />
             </state>
           </provider>
@@ -160,6 +169,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -195,7 +205,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -277,16 +286,26 @@
       <workItem from="1478378835315" duration="342000" />
       <workItem from="1478379601078" duration="11188000" />
       <workItem from="1478395666715" duration="7509000" />
+<<<<<<< HEAD
       <workItem from="1478405932741" duration="2511000" />
       <workItem from="1478409609353" duration="82000" />
+=======
+>>>>>>> parent of acf7719... ring
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="21632000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="48" y="23" width="1286" height="823" extended-state="0" />
+=======
+    <option name="totallyTimeSpent" value="19039000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="48" y="23" width="1286" height="823" extended-state="1" />
+>>>>>>> parent of acf7719... ring
     <editor active="false" />
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16640747" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -331,6 +350,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/textures/mercury.jpg">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -449,6 +469,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> parent of acf7719... ring
     <entry file="file://$PROJECT_DIR$/textures/doge.jpg">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -522,8 +544,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/solar.html">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="15">
           <caret line="265" column="12" selection-start-line="265" selection-start-column="12" selection-end-line="265" selection-end-column="12" />
+=======
+        <state relative-caret-position="1980">
+          <caret line="132" column="62" selection-start-line="132" selection-start-column="62" selection-end-line="132" selection-end-column="62" />
+>>>>>>> parent of acf7719... ring
           <folding />
         </state>
       </provider>
