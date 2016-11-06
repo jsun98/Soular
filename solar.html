@@ -37,6 +37,7 @@
     const JUPITORPIC = 'textures/jupitor.jpg';
     const SATURNRINGPIC = 'textures/saturnring.png';
     const URANUSRINGPIC = 'textures/uranusring.png';
+    const PLUTOPIC = 'textures/pluto.jpg';
 
 
     // Graphics variables
@@ -48,8 +49,9 @@
 
     //var orbitController;
 
-    var sun, mercury, venus, earth, mars, jupitor, saturn, uranus, neptune;
+    var sun, mercury, venus, earth, mars, jupitor, saturn, uranus, neptune, pluto;
     var saturn_ring, uranus_ring;
+    var moon;
 
 
     // - Main code -
@@ -91,7 +93,7 @@
         container = document.createElement( 'div' );
         document.body.appendChild( container );
 
-        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 25000 );
+        camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 30000 );
         camera.position.z = 0;
         camera.position.y = 5500;
 
@@ -307,6 +309,17 @@
             scene.add(neptune);
         });
 
+        txtureLoader.load(PLUTOPIC, function (texture) {
+            var geometry = new THREE.SphereGeometry(80, 32, 32);
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
+            var angle = (17/180)*Math.PI;
+            pluto = new THREE.Mesh(geometry, material);
+            pluto.castShadow = true;
+            pluto.receiveShadow = true;
+            pluto.position.x = 10500;
+            scene.add(pluto);
+        });
+
 
         function drawCircles(radius) {
 
@@ -316,6 +329,17 @@
 
             geometry.vertices.shift();
             geometry.rotateX(Math.PI/2);
+            scene.add(new THREE.Line(geometry, material));
+        }
+
+        function drawCirclesTilted(radius, theta) {
+
+            var segments = 64;
+            var material = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
+            var geometry = new THREE.CircleGeometry(radius, segments);
+
+            geometry.vertices.shift();
+            geometry.rotateX((Math.PI/2)-theta);
             scene.add(new THREE.Line(geometry, material));
         }
 
@@ -329,6 +353,7 @@
         drawCircles(7000);
         drawCircles(8400);
         drawCircles(9500);
+        drawCirclesTilted(10500,(17*Math.PI)/180);
 
         /*
         txtureLoader.load( DOGEPIC, function ( texture s) {
@@ -481,9 +506,21 @@
             neptune.rotation.x += rotationSpeed;
             neptune.rotation.y += rotationSpeed;
         }
+        if (pluto) {
+            pluto.position.x = 10500 * Math.cos(theta);
+            pluto.position.y = 10500 * Math.sin(theta)*Math.cos((73/180)*Math.PI);
+            pluto.position.z = 10500 * Math.sin(theta);
+            pluto.rotation.x += rotationSpeed;
+            pluto.rotation.y += rotationSpeed;
+        }
 
         theta += 0.001;
-        if (theta == Math.PI * 2 - 0.01) theta = 0;
+        if (theta == Math.PI * 2 - 0.001) {
+            theta = 0;
+            pluto.position.x=10500;
+            pluto.position.y=0;
+            pluto.position.z=0;
+        }
 
         renderer.render( scene, camera );
 
