@@ -136,8 +136,8 @@
          light.shadow.mapSize.height = 2048;
          scene.add( light );*/
 
-        var ambLight = new THREE.AmbientLight( 0x505050);
-        var light = new THREE.PointLight( 0xffffff, 4, 4000);
+        var ambLight = new THREE.AmbientLight( 0x909090);
+        var light = new THREE.PointLight( 0xffffff, 2, 5000);
 
         scene.add( ambLight );
         scene.add( light );
@@ -173,7 +173,7 @@
         //
         var texture = new THREE.TextureLoader().load( STARPIC );
         texture.format = THREE.RGBFormat;
-        var material   = new THREE.MeshBasicMaterial( { map: texture } );
+        var material   = new THREE.MeshLambertMaterial( { map: texture } );
         var mesh = new THREE.Mesh( geometry, material );
         scene.add( mesh );
     }
@@ -230,7 +230,7 @@
 
         txtureLoader.load(MERCURYPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(35, 32, 32);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -240,7 +240,7 @@
 
         txtureLoader.load(VENUSPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(80, 32, 32);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -250,7 +250,7 @@
 
         txtureLoader.load(EARTHPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(80, 32, 32);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -260,7 +260,7 @@
 
         txtureLoader.load(MARSPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(70, 32, 32);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -270,7 +270,7 @@
 
         txtureLoader.load(JUPITORPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(280, 32, 32);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -280,7 +280,7 @@
 
         txtureLoader.load(SATURNPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(200, 32, 32);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -291,7 +291,7 @@
         txtureLoader.load(SATURNRINGPIC, function (texture) {
             var geometry = new THREE.RingGeometry(220, 420, 32);
             geometry.rotateX(Math.PI / 3);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5, side: THREE.DoubleSide});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5, side: THREE.DoubleSide});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -311,7 +311,7 @@
         });
 
         txtureLoader.load(URANUSRINGPIC, function (texture) {
-            var geometry = new THREE.RingGeometry(220, 380, 32);
+            var geometry = new THREE.RingGeometry(220, 270, 32);
             var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5, side: THREE.DoubleSide});
             var planet = new THREE.Mesh(geometry, material);
             planet.rotateX(-Math.PI/3);
@@ -323,7 +323,7 @@
 
         txtureLoader.load(NEPTUNEPIC, function (texture) {
             var geometry = new THREE.SphereGeometry(100, 32, 32);
-            var material = new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
+            var material = new THREE.MeshLambertMaterial({map: texture, overdraw: 0.5});
             var planet = new THREE.Mesh(geometry, material);
             planet.castShadow = true;
             planet.receiveShadow = true;
@@ -335,7 +335,7 @@
         function drawCircles(radius) {
 
                     var segments = 64;
-                    var material = new THREE.LineBasicMaterial({color: 0xFFFFFF});
+                    var material = new THREE.MeshLambertMaterial({color: 0xFFFFFF});
                     var geometry = new THREE.CircleGeometry(radius, segments);
 
             geometry.vertices.shift();
@@ -354,7 +354,7 @@
         drawCircles(4900);
 
         /*
-        txtureLoader.load( DOGEPIC, function ( texture ) {
+        txtureLoader.load( DOGEPIC, function ( texture s) {
             var geometry = new THREE.SphereGeometry( 30, 32, 32 );
             var material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
             var planet = new THREE.Mesh( geometry, material );
