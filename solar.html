@@ -38,6 +38,20 @@
     const JUPITORPIC = 'textures/jupitor.jpg';
 
 
+    //Physics variables
+    var gravityConstant = 0;
+    var collisionConfiguration;
+    var dispatcher;
+    var broadphase;
+    var solver;
+    var physicsWorld;
+    var rigidBodies = [];
+    var margin = 0.05;
+    //var hinge;
+    //var rope;
+    //var transformAux1 = new Ammo.btTransform();
+
+
     // Graphics variables
     var container, stats;
     var camera, controls, scene, renderer;
@@ -77,7 +91,19 @@
         */
         window.addEventListener( 'resize', onWindowResize, false );
     }
-
+    
+    //initialize physics
+    function initPhysics() {
+	collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
+	dispatcher = new Ammo.btCollisionDispatcher( collisionConfiguration );
+	broadphase = new Ammo.btDbvtBroadphase();
+	solver = new Ammo.btSequentialImpulseConstraintSolver();
+	softBodySolver = new Ammo.btDefaultSoftBodySolver();
+	physicsWorld = new Ammo.btSoftRigidDynamicsWorld( dispatcher, broadphase, solver, collisionConfiguration, softBodySolver);
+	physicsWorld.setGravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+	physicsWorld.getWorldInfo().set_m_gravity( new Ammo.btVector3( 0, gravityConstant, 0 ) );
+    }
+	
     //initialize graphics and background panorama
     function initGraphics() {
         if ( ! Detector.webgl ) {
