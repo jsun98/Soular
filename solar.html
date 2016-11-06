@@ -428,49 +428,45 @@
         //objects[3].rotation.y += 0.005;
         //planet.rotation.y += 0.03;
 
-
-
         if (mercury) {
-            mercury.position.x = 2400 * Math.cos(theta);
-            mercury.position.z = 2400 * Math.sin(theta);
+            mercury.position.x = 2400 * Math.cos((47.4/5.4)*theta);
+            mercury.position.z = 2400 * Math.sin((47.4/5.4)*theta);
         }
         if (venus) {
-            venus.position.x = 2800 * Math.cos(theta);
-            venus.position.z = 2800 * Math.sin(theta);
+            venus.position.x = 2800 * Math.cos((35/5.4)*theta);
+            venus.position.z = 800 * Math.sin((35/5.4)*2theta);
         }
         if (earth) {
-            earth.position.x = 3300 * Math.cos(theta);
-            earth.position.z = 3300 * Math.sin(theta);
+            earth.position.x = 3300 * Math.cos((29.8/5.4)*theta);
+            earth.position.z = 3300 * Math.sin((29.8/5.4)*theta);
         }
         if (mars) {
-            mars.position.x = 2400 * Math.cos(theta);
-            mars.position.z = 2400 * Math.sin(theta);
+            mars.position.x = 3800 * Math.cos((24.1/5.4)*theta);
+            mars.position.z = 3800 * Math.sin((24.1/5.4)*theta);
         }
         if (jupitor) {
-            jupitor.position.x = 2400 * Math.cos(theta);
-            jupitor.position.z = 2400 * Math.sin(theta);
+            jupitor.position.x = 5200 * Math.cos((13.1/5.4)*theta);
+            jupitor.position.z = 5200 * Math.sin((13.1/5.4)*theta);
         }
         if (saturn && saturn_ring) {
-            saturn.position.x = 2400 * Math.cos(theta);
-            saturn.position.z = 2400 * Math.sin(theta);
-            saturn_ring.position.x = 2400 * Math.cos(theta);
-            saturn_ring.position.z = 2400 * Math.sin(theta);
+            saturn.position.x = 7000 * Math.cos((9.7/5.4)*theta);
+            saturn.position.z = 7000 * Math.sin((9.7/5.4)*theta);
+            saturn_ring.position.x = 7000 * Math.cos((9.7/5.4)*theta);
+            saturn_ring.position.z = 7000 * Math.sin((9.7/5.4)*theta);
         }
         if (uranus && uranus_ring) {
-            uranus.position.x = 2400 * Math.cos(theta);
-            uranus.position.z = 2400 * Math.sin(theta);
-            uranus_ring.position.x = 2400 * Math.cos(theta);
-            uranus_ring.position.z = 2400 * Math.sin(theta);
+            uranus.position.x = 8400 * Math.cos((6.8/5.4)*theta);
+            uranus.position.z = 8400 * Math.sin((6.8/5.4)*theta);
+            uranus_ring.position.x = 8400 * Math.cos((6.8/5.4)*theta);
+            uranus_ring.position.z = 8400 * Math.sin((6.8/5.4)*theta);
         }
         if (neptune) {
-            neptune.position.x = 2400 * Math.cos(theta);
-            neptune.position.z = 2400 * Math.sin(theta);
+            neptune.position.x = 9500 * Math.cos(theta);
+            neptune.position.z = 9500 * Math.sin(theta);
         }
-
 
         theta += 0.01;
         if (theta == Math.PI * 2 - 0.01) theta = 0;
-
 
         renderer.render( scene, camera );
 
