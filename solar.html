@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>three.js webgl - draggable cubes</title>
+    <title>three.js - webGL - Solar System Simulator</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style>
@@ -29,7 +29,7 @@
     const VENUSPIC = 'textures/venus.jpg';
     const MERCURYPIC = 'textures/mercury.jpg';
     const MARSPIC = 'textures/mars.jpg';
-    const DOGEPIC = 'textures/doge.jpg';
+    //const DOGEPIC = 'textures/doge.jpg';
     const SATURNPIC = 'textures/saturn.jpg';
     const URANUSPIC = 'textures/uranus.jpg';
     const NEPTUNEPIC = 'textures/neptune.jpg';
@@ -79,10 +79,12 @@
         }
         container = document.createElement( 'div' );
         document.body.appendChild( container );
+
         camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 1, 12000 );
-        camera.position.z = 6000;
+        camera.position.z = 2500;
+
         scene = new THREE.Scene();
-        renderer = new THREE.WebGLRenderer( { antialias: true } );
+        renderer = new THREE.WebGLRenderer(  );
 
         //lighting and colors
         scene.add( new THREE.AmbientLight( 0x505050 ) );
@@ -137,8 +139,10 @@
         //first person controls
         controls = new THREE.FirstPersonControls( camera );
         controls.movementSpeed = 1000;
-        controls.lookSpeed = 0.125;
+        controls.lookSpeed = 0.100;
         controls.lookVertical = true;
+        controls.enabled = true;
+
 
         /*
         //controls
@@ -292,6 +296,7 @@
         renderer.setSize( window.innerWidth, window.innerHeight );
     }
 
+
     //loop
     function animate() {
 
@@ -306,6 +311,8 @@
     function render() {
 
         controls.update( clock.getDelta() );
+
+
 
         renderer.render( scene, camera );
 
